@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+	<title>Station F - Book a room</title>
+</head>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css">
+<body>
+<div class="banner">
+	<img src="/static/imgs/banner.jpg"/>
+</div>
+<form action="/" method="POST">
+	<div class="entire_form">
+		<div class="search_form">
+			<div class="textfield">
+				Search by name :<br />
+				<input type="text" name="room_name" placeholder="Name, keyword..">
+			</div>
+			<div class="capacityfield">
+				Search by capacity : <br />
+				<input type="number" name="capacity" min=0 value=0>
+			</div>
+			<div class="equipmentfield">
+				Search by equipment : <br />
+				<div class="container">
+					<input type="checkbox" name="tv"><br /> TV
+				</div>
+				<div class="container">
+					<input type="checkbox" name="retro"><br /> Projector
+				</div>
+			</div>
+		</div>
+		<div class="datefield">
+			Select a datetime (required) :
+			<input type="date" name="date" value="<%= day %>" required>
+	 		<select name="hour" required>
+				<% for (var i = 6; i < 23; i++) { %>
+				<option value="<%= i %>"
+				<%if (i == hour){%>selected <%}; %> > <%= i %>:00 </option><%}%>
+			</select>
+		</div>
+</div>
+<div class="submitfield">
+	<input type="submit" name="valider">
+</div>
+</form>
+
+<% var findname = new RegExp(name) ;%>
+<% rooms.forEach(function(elem, key) {
+if (findname.test(elem.name) &&
+(capacity === 0 || elem.capacity >= capacity) && 
+!(tv !== undefined && !((elem.equipements[0] !== undefined && elem.equipements[0].name === 'TV') || (elem.equipements[1] !== undefined && elem.equipements[1].name === 'TV' ))) && !(retro !== undefined && !((elem.equipements[0] !== undefined && elem.equipements[0].name === 'Retro Projecteur') || (elem.equipements[1] !== undefined && elem.equipements[1].name === 'Retro Projecteur' )))){ %>
+<div class="room_container" id="room_container<%= key %>">
+	<div id="hidden_form<%= key %>" onmouseout='hideElem(<%= key %>)' onmouseover='displayElem(<%= key %>)' class='hidden_forms'>
+		<form method="POST" action="/reserver/">
+			<input type="text" name="user" placeholder="Company name" required>
+			<input type="hidden" name="id_room" value="<%= key %>">
+			<input type="hidden" name="day" value="<%= day %>">
+			<input type="hidden" name="hour" value="<%= hour %>">
+			<input type="hidden" name="room_name" value="<%= elem.name %>">
+		</form>
+	</div>
+	<div id="holder<%= key %>" class="holder">
+		<script>
+		var jskey = <%= key %>;
+
+		var newButton = document.createElement("div");
+		newButton.innerHTML = "<button onmouseout='hideElem("+jskey+")' onmouseover='displayElem("+jskey+")'>";
+		newButton.setAttribute("class", "select_room");
+		var currentDiv = document.getElementById("room_container"+jskey);
+		var toto = currentDiv.appendChild(newButton);
+		</script>
+		<h3>Book this Room</h3>
+		<p class="up">
+		<h1><%= elem.name %></h1>
+		<p>(<%= elem.description %>)</p>
+		<b>Capacity : </b><%= elem.capacity %>
+		<p> <% if (elem.equipements[0] !== undefined){ %>
+		<b>Equipments :<br /></b> 
+		<% elem.equipements.forEach(function(equip) { %> 
+		> <%= equip.name %> <br /> <% });}
+		else {%>
+		<b>No equipments 😭</b><% }%></p>
+	</div>
+	</button>
+</div><%} });%>
+</body>
+<script>
+	function displayElem(elem) {
+		div = document.getElementById('hidden_form'+elem);
+		div.style.display = "block";
+	}
+	function hideElem(elem) {
+		div = document.getElementById('hidden_form'+elem);
+		div.style.display = "none";
+	}
+</script>
+</html>

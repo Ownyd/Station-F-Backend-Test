@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+<title>Station F - Booking request</title>
+</head>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+<body>
+<div class="banner">
+<img src="/static/imgs/banner.jpg"/>
+</div>
+<% if (msg ==='success'){ %>
+<div class="okBox">
+<h1> SUCCESS ! 🤩</h1><br />
+<p> The room <b><%= roomName %></b> is now booked for <b><%= user %></b> </p>
+<p> The <b><%= day %></b> at <b><%= hour %>.00</b></p>
+<b><p style="margin-top:80px;"><a href='/'>Go to homepage</a></p></b>
+</div><% }  else { %>
+<div class="koBox">
+<h1> FAILURE.. 😩</h1><br />
+<p> The server returned : <b><%= msg %></b></p>
+<b><p style="margin-top:120px;"><a href='/'>Go to homepage</a></p></b>
+</div><% } %>
+</body>
+</html>

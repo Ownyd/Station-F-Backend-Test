@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<title>Station F - Book a room</title>
+</head>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+<body>
+<div class="banner">
+<img src="/static/imgs/banner.jpg"/>
+</div>
+<form action="/" method="POST">
+<div class="entire_form">
+<div class="search_form">
+<div class="textfield">
+Search by name :<br />
+<input type="text" name="room_name" placeholder="Name, keyword..">
+</div>
+<div class="capacityfield">
+Search by capacity : <br />
+<input type="number" name="capacity" min=0 value=0>
+</div>
+<div class="equipmentfield">
+Search by equipment : <br />
+<div class="container">
+<input type="checkbox" name="tv"><br /> TV
+</div><div class="container">
+<input type="checkbox" name="retro"><br /> Projector
+</div>
+</div>
+</div>
+<div class="datefield">
+Select a datetime (required) :
+<input type="date" name="date" required>
+<select name="hour" required>
+<option value="6">6:00</option>
+<option value="7">7:00</option>
+<option value="8">8:00</option>
+<option value="9">9:00</option>
+<option value="10">10:00</option>
+<option value="11">11:00</option>
+<option value="12">12:00</option>
+<option value="13">13:00</option>
+<option value="14">14:00</option>
+<option value="15">15:00</option>
+<option value="16">16:00</option>
+<option value="17">17:00</option>
+<option value="18">18:00</option>
+<option value="19">19:00</option>
+<option value="20">20:00</option>
+<option value="21">21:00</option>
+<option value="22">22:00</option>
+</select>
+</div>
+</div>
+<div class="submitfield">
+<input type="submit" name="valider">
+</div>
+
+</form>
+</body>
+</html>
