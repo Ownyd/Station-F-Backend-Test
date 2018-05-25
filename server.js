@@ -59,31 +59,31 @@ app.get('/api/reserver/',function(req,res){
 	else if (idRoomRegExp.test(id_room) === false || parseInt(id_room) >= rooms['rooms'].length)
 		res.json({message: "Error : Invalid room selected."});
 	else{
-	con.connect(function(err) {
+		con.connect(function(err) {
 			var sql = "SELECT * FROM Reservations WHERE id_room ='"+id_room+"' AND date ='"+day+"' AND hour = '"+hour+"'";
 			con.query(sql, function (err, result) {
 			if (result.length === 0)
 			{
-//Insert a reservation
-		con.connect(function(err) {
-			var sql = "INSERT INTO Reservations (id_room, username, date, hour) values ('"+id_room+"','"+user+"', '"+day+"', '"+hour+"')"; // TODO : Sanitizer
- 			con.query(sql, function (err, result) {
-			});
-		});
+				//Insert a reservation
+				con.connect(function(err) {
+				var sql = "INSERT INTO Reservations (id_room, username, date, hour) values ('"+id_room+"','"+user+"', '"+day+"', '"+hour+"')"; // TODO : Sanitizer
+ 				con.query(sql, function (err, result) {
+				});
+				});
 
-		//Overwriting .json File
-		con.connect(function(err) {
-			var sql = "SELECT * FROM Reservations";
-			con.query(sql, function (err, result) {
+				//Overwriting .json File
+				con.connect(function(err) {
+				var sql = "SELECT * FROM Reservations";
+				con.query(sql, function (err, result) {
 				fs.writeFileSync("reservations.json", JSON.stringify(result), "UTF-8");
+				});
+				});
+				res.json({message: "success"})
+			}
+		else
+			res.json({message: "Error : This booking already Exists. Please refresh your browser."});
 			});
 		});
-	res.json({message: "success"})
-}
-	else
-		res.json({message: "Error : This booking already Exists. Please refresh your browser."});
-			});
-			});
 	}
 });
 
@@ -97,12 +97,12 @@ app.get('/api/available',function(req,res){
 		res.json({message: "Error"});
 	else
 	{
-	con.connect(function(err) {
-	   var sql = "SELECT id_room FROM Reservations WHERE date ='"+day+"' and hour ='"+hour+"'";
+		con.connect(function(err) {
+		var sql = "SELECT id_room FROM Reservations WHERE date ='"+day+"' and hour ='"+hour+"'";
 		con.query(sql, function (err, result) {
 			res.json({result : result});
 		});
-	});
+		});
 	}
 });
 
@@ -114,10 +114,10 @@ app.get('/', function(req, res, next) {
 
 
 .post('/', function(req, res) {
-ajaxGet("http://localhost:8080/api/available?day="+req.body.date+"&hour="+req.body.hour,function(response) {
+	ajaxGet("http://localhost:8080/api/available?day="+req.body.date+"&hour="+req.body.hour,function(response) {
 	var taken_rooms = JSON.parse(response);
+	// Render index if form is corrupted
 	if (taken_rooms['message'] === "Error")
-	// Return index if form is corrupted
 		res.render('index');
 	else
 	{
@@ -127,14 +127,12 @@ ajaxGet("http://localhost:8080/api/available?day="+req.body.date+"&hour="+req.bo
 		});
 })
 
-.post('/reserver', function(req, res) { //TODO : Sanitize params query
-
-//Check if reservation doesn't exists
-ajaxGet("http://localhost:8080/api/reserver?id_room="+req.body.id_room+"&day="+req.body.day+"&hour="+req.body.hour+"&user="+req.body.user,function(response)
-{
-var msg = JSON.parse(response);
-res.render('bookConfirmation', {msg: msg['message'], roomName:req.body.room_name, day: req.body.day, hour: req.body.hour, user: req.body.user}); //Useless to sanitize room name (not stored)
-});
+.post('/reserver', function(req, res) {
+	//Check if reservation doesn't exists
+	ajaxGet("http://localhost:8080/api/reserver?id_room="+req.body.id_room+"&day="+req.body.day+"&hour="+req.body.hour+"&user="+req.body.user,function(response){
+	var msg = JSON.parse(response);
+	res.render('bookConfirmation', {msg: msg['message'], roomName:req.body.room_name, day: req.body.day, hour: req.body.hour, user: req.body.user}); //Useless to sanitize room name (not stored)
+	});
 })
 
 /* Public folder */
