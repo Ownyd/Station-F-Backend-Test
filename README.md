@@ -7,7 +7,7 @@ To run :
 
 ```npm install``` Install npm packages
 
-```php setup/setup.php``` Create Database and Tables (Mysql)
+```php setup/setup.php``` Create Database and Tables (Require Mysql)
 
 ```npm start``` Start local server on port 8080
 
