@@ -13,6 +13,6 @@ To run :
 
 Extern `room` database taken from http://online.stationf.co/tests/rooms.json api.
 
-This app is designed to support any Json which mean any number of rooms.
+This app is designed to support any Json which means any number of rooms.
 
 Enjoy !
